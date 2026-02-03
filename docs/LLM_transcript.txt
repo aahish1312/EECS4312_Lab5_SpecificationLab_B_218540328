@@ -10,7 +10,27 @@ LLM Response 2: "Copy paste LLMs response"
 --------------------------------------------------
 
 
-Prompt 1 : def test_non_dict_request_raises(): # Non-Dict Request Raises Error # Constraint: structural validation # Reason: request must be a dict resources = {'cpu': 5} requests = [{'cpu': 2}, ['mem', 1]] # malformed request with pytest.raises(ValueError): > is_allocation_feasible(resources, requests) tests\test_solution.py:46: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ resources = {'cpu': 5}, requests = [{'cpu': 2}, ['mem', 1]] def is_allocation_feasible( resources: Dict[str, Number], requests: List[Dict[str, Number]] ) -> bool: """ Determine whether a set of resource requests can be satisfied given limited capacities. """ # Track total requested amount for each resource total_requested: Dict[str, Number] = {} for request in requests: > for resource, amount in request.items(): ^^^^^^^^^^^^^ E AttributeError: 'list' object has no attribute 'items' src\solution.py:28: AttributeError =================================================================== short test summary info =================================================================== FAILED tests/test_solution.py::test_non_dict_request_raises - AttributeError: 'list' object has no attribute 'items
+Prompt 1 :: this is my code and I am getting this error , def is_allocation_feasible(
+    resources: Dict[str, Number],
+    requests: List[Dict[str, Number]]
+) -> bool:
+    """
+    Determine whether a set of resource requests can be satisfied given limited capacities.
+    """
+    # Track total requested amount for each resource
+    total_requested: Dict[str, Number] = {}
+
+    for request in requests:
+        for resource, amount in request.items():
+            if resource not in resources:
+                return False
+
+            total_requested[resource] = total_requested.get(resource, 0) + amount
+
+            if total_requested[resource] > resources[resource]:
+                return False
+
+    return True def test_non_dict_request_raises(): # Non-Dict Request Raises Error # Constraint: structural validation # Reason: request must be a dict resources = {'cpu': 5} requests = [{'cpu': 2}, ['mem', 1]] # malformed request with pytest.raises(ValueError): > is_allocation_feasible(resources, requests) tests\test_solution.py:46: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ resources = {'cpu': 5}, requests = [{'cpu': 2}, ['mem', 1]] def is_allocation_feasible( resources: Dict[str, Number], requests: List[Dict[str, Number]] ) -> bool: """ Determine whether a set of resource requests can be satisfied given limited capacities. """ # Track total requested amount for each resource total_requested: Dict[str, Number] = {} for request in requests: > for resource, amount in request.items(): ^^^^^^^^^^^^^ E AttributeError: 'list' object has no attribute 'items' src\solution.py:28: AttributeError =================================================================== short test summary info =================================================================== FAILED tests/test_solution.py::test_non_dict_request_raises - AttributeError: 'list' object has no attribute 'items
 LLM response 1: What’s going wrong (in plain words)
 
 One request is a list: ['mem', 1]
