@@ -42,4 +42,9 @@ def is_allocation_feasible(
             if total_requested[resource] > resources[resource]:
                 return False
 
-    return True
+    for resource, capacity in resources.items():
+        if total_requested.get(resource, 0) < capacity:
+            return True  
+
+    return False
+
